@@ -11,9 +11,7 @@ const Navbar = () => {
 
   return (
     <nav style={{ padding: "10px", background: "#222", color: "#fff" }}>
-      <Link to="/" style={{ marginRight: "10px", color: "#fff" }}>
-        Home
-      </Link>
+     
 
       {token ? (
         <>

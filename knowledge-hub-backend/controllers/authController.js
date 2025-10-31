@@ -6,17 +6,27 @@ const generateToken = (id, role) =>
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, adminKey } = req.body; // added adminKey
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ message: "User exists" });
 
+    // Default role = "user"
+    let role = "user";
+
+    // If adminKey matches secret, make them admin
+    if (adminKey && adminKey === process.env.ADMIN_SECRET) {
+      role = "admin";
+    }
+
     const user = await User.create({ name, email, password, role });
     const token = generateToken(user._id, user.role);
+
     res.status(201).json({ token });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 export const loginUser = async (req, res) => {
   try {
